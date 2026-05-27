@@ -99,6 +99,39 @@ export const createNewPost = (caption, image) => async (dispatch) => {
   }
 };
 
+export const generateCaption = (prompt) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "generateCaptionRequest",
+    });
+
+    const { data } = await axios.post(
+      "/api/v1/caption/generate",
+      {
+        prompt,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    dispatch({
+      type: "generateCaptionSuccess",
+      payload: data.caption,
+    });
+
+    return data.caption;
+  } catch (error) {
+    dispatch({
+      type: "generateCaptionFailure",
+      payload: error.response.data.message,
+    });
+    throw error;
+  }
+};
+
 export const updatePost = (caption, id) => async (dispatch) => {
   try {
     dispatch({

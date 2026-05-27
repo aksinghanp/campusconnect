@@ -7,10 +7,13 @@ const {
   updateCaption,
   commentOnPost,
   deleteComment,
+  generateCaption,
 } = require("../controllers/post");
 const { isAuthenticated } = require("../middlewares/auth");
 
 const router = express.Router();
+
+router.route("/caption/generate").post(isAuthenticated, generateCaption);
 
 router.route("/post/upload").post(isAuthenticated, createPost);
 

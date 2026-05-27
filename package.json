@@ -4,12 +4,22 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "start": "node backend/server.js",
     "dev": "nodemon backend/server.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false && npm install --prefix frontend && npm run build --prefix frontend"
+    "build": "npm install --prefix frontend && npm run build --prefix frontend",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": "18.x",
+    "npm": "9.x"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
   "dependencies": {
+    "axios": "^1.5.0",
     "bcrypt": "^5.0.1",
     "cloudinary": "^1.28.1",
     "cookie-parser": "^1.4.6",
@@ -17,6 +27,7 @@
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.6",
-    "nodemailer": "^6.7.2"
+    "nodemailer": "^6.7.2",
+    "openai": "^6.39.0"
   }
 }

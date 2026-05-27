@@ -51,6 +51,18 @@ export const likeReducer = createReducer(initialState, {
     state.error = action.payload;
   },
 
+  generateCaptionRequest: (state) => {
+    state.loading = true;
+  },
+  generateCaptionSuccess: (state, action) => {
+    state.loading = false;
+    state.caption = action.payload;
+  },
+  generateCaptionFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
+
   updateCaptionRequest: (state) => {
     state.loading = true;
   },

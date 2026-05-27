@@ -36,6 +36,7 @@
   border: none;
   outline: none;
   font: 100 1.2rem "Roboto", sans-serif;
+  margin: 1vmax 0;
 }
 
 .newPostForm > input[type="file"] {

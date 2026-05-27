@@ -1,6 +1,8 @@
 const Post = require("../models/Post");
 const User = require("../models/User");
 const cloudinary = require("cloudinary");
+const axios = require("axios");
+
 exports.createPost = async (req, res) => {
   try {
     const myCloud = await cloudinary.v2.uploader.upload(req.body.image, {
@@ -34,6 +36,67 @@ exports.createPost = async (req, res) => {
   }
 };
 
+exports.generateCaption = async (req, res) => {
+  try {
+    if (!process.env.OPENROUTER_API_KEY) {
+      return res.status(500).json({
+        success: false,
+        message: "OpenRouter API key not found",
+      });
+    }
+
+    const { prompt } = req.body;
+
+    const userPrompt = prompt
+      ? `Generate a short Instagram-style caption for: ${prompt}`
+      : "Generate a short social media caption.";
+
+    const response = await axios.post(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+       model: "openrouter/free",
+
+        messages: [
+          {
+            role: "user",
+            content: userPrompt,
+          },
+        ],
+
+        temperature: 0.8,
+        max_tokens: 60,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "http://localhost:3000",
+          "X-Title": "CampusConnect",
+        },
+      }
+    );
+
+    const caption =
+      response.data?.choices?.[0]?.message?.content?.trim();
+
+    return res.status(200).json({
+      success: true,
+      caption: caption || "No caption generated",
+    });
+
+  } catch (error) {
+    console.log(
+      error.response?.data || error.message
+    );
+
+    return res.status(500).json({
+      success: false,
+      message:
+        error.response?.data?.error?.message ||
+        "Failed to generate caption",
+    });
+  }
+};
 exports.deletePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
