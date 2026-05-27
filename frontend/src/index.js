@@ -1,10 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import axios from "axios";
 import App from "./App";
 import { Provider } from "react-redux";
 import store from "./store";
 import { Provider as AlertProvider, positions, transitions } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
+
+axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL || "";
+axios.defaults.withCredentials = true;
 
 const options = {
   position: positions.BOTTOM_CENTER,
